@@ -35,12 +35,9 @@ class Tamagotchi {
 		this.boredom = 1;
 		this.age = 0;
 	}
-	nameTamago(){
+	nameTamago(name){
 		console.log("I've got a name!");
-		//get the value of input
-		$('input').on('change', (event) => {
-			this.name = $(event.currentTarget).text();
-		})
+		this.name = name;
 	}
 
 	feedTamago(){ 			// Have xeno eat a burger/person/doughnut
@@ -62,8 +59,6 @@ class Tamagotchi {
 
 // Create Tamagotchi
 const xeno = new Tamagotchi();
-console.log(xeno);
-
 
 xeno.nameTamago();
 console.log(xeno);
@@ -85,7 +80,17 @@ const game = {
 
 // HARD CODE BUTTONS ON SCREEN IN HTML
 
-// Buttons for food
+// Button to name
+$('#nameButton').on('click', () => {
+
+  // Grab the inputs VALUE
+  const $name = $('input').val();
+
+  console.log($name);
+  xeno.nameTamago($name)
+});
+
+// Button for food
 // When click, call feedTamago()
 
 // Button for lights 

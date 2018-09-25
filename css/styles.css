@@ -2,15 +2,27 @@ body {
 	background-color: black;
 }
 
-.name {
+#tamagoName {
 	display: flex;
+	margin: 50px auto;
+}
+
+input {
 	font-size: 15px;
 	padding-left: 5px;
 	height: 30px;
 	width: 500px;
 	border: 1px solid white;
 	border-radius: 5px;
-	margin: 50px auto;
+}
+
+#nameButton {
+	font-size: 10px;
+	margin-left: 5px;
+	height: 30px;
+	width: 60px;
+	border: 1px solid white;
+	border-radius: 5px;
 }
 
 .background {
