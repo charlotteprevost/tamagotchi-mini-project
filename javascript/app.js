@@ -12,6 +12,8 @@ IF NO INTERACTION, TAMAGO DIES
 
 ***************************************************/
 
+let timer = 0;
+
 // MAKE TAMAGOTCHI CLASS
 // In constructor:
 // Name
@@ -34,7 +36,6 @@ class Tamagotchi {
 		this.sleepiness = 1;
 		this.boredom = 1;
 		this.age = 0;
-		this.timer = 0
 	}
 
 	nameTamago(name){			// Called when user clicks on nameButton
@@ -82,19 +83,24 @@ let interval = setInterval(function() {
 	if (xeno.name){
 		
 		// Have a timer to set stats
-		xeno.timer += 1;
 
-		if (timer % 20 === 0){				// slow speed but medium-strong
+		if (timer % 25 === 0){				// slow speed but medium-strong
 			xeno.sleepiness += 2;
-		} else if (timer % 14 === 0){		// average speed but medium
+		
+		} else if (timer % 12 === 0){		// average speed but medium
 			xeno.hunger += 1;
-		} else if (timer % 10 === 0){		// fast but little
+		
+		} else if (timer % 9 === 0){		// fast but little
 			xeno.boredom += 1;
 		}
-		console.log(xeno.hunger);
+		
+		timer += 1;
+		console.log(	"Hunger: " + xeno.hunger + "\n" + 
+						"Sleepiness: " + xeno.sleepiness + "\n" +
+						"Boredom: " + xeno.boredom);
 
 	}
-}, 1000);			// Do something every 2 seconds
+}, 1000);			// Do something every 1 seconds
 
 
 
