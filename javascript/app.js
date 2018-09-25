@@ -34,26 +34,34 @@ class Tamagotchi {
 		this.sleepiness = 1;
 		this.boredom = 1;
 		this.age = 0;
+		this.timer = 0
 	}
 
-	nameTamago(name){		// CALLED when user clicks on nameButton
+	nameTamago(name){			// Called when user clicks on nameButton
 		console.log("I've got a name!");
 		this.name = name;
 	}
 
-	feedTamago(){ 			// Have xeno eat a burger/person/doughnut
+	feedTamago(){ 				// Called when user clicks on .food
+		// Have xeno eat a burger/person/doughnut
 		console.log("Omnomnom");
+		this.hunger -= 5;
 	}
 
-	sleepTamago(){			// Have xeno close eyes and have zZzzZZZ
+	sleepTamago(){				// Called when user clicks .light	
+		// Have xeno close eyes and have zZzzZZZ
 		console.log("zzzZZZZ");
+		this.sleepiness = 0; 	// Reset sleep to zero 
 	}
 
-	playTamago(){			// Have xeno have ^^ eyes and dance
+	playTamago(){				// Called when user clicks on .play
+		// Have xeno have ^^ eyes and dance
 		console.log(" <3 ");
+		this.boredom -= 3;
 	}
 
-	getsOlder(){			// Give xeno a birthday cake
+	getsOlder(){				// Called automatically
+		// Give xeno a birthday cake
 		console.log("Happy Birthday!");
 	}
 
@@ -72,13 +80,21 @@ let interval = setInterval(function() {
 
 	// Only do this if Tamago has a name!
 	if (xeno.name){
-		// We'll decide later the stats
-		xeno.hunger += 1;
-		xeno.sleepiness += 1;
-		xeno.boredome += 1;
+		
+		// Have a timer to set stats
+		xeno.timer += 1;
+
+		if (timer % 20 === 0){				// slow speed but medium-strong
+			xeno.sleepiness += 2;
+		} else if (timer % 14 === 0){		// average speed but medium
+			xeno.hunger += 1;
+		} else if (timer % 10 === 0){		// fast but little
+			xeno.boredom += 1;
+		}
 		console.log(xeno.hunger);
+
 	}
-}, 2000);			// Do something every 2 seconds
+}, 1000);			// Do something every 2 seconds
 
 
 
@@ -103,15 +119,29 @@ $('#nameButton').on('click', () => {
   xeno.nameTamago($name)
 });
 
+
 // Button for food
 // When click, call feedTamago()
+$('.food').on('click', () => {
+
+	xeno.feedTamago();
+});
+
 
 // Button for lights 
 // When click, call sleepTamago()
+$('.light').on('click', () => {
+
+	xeno.sleepTamago();
+});
+
 
 // Button for play
 // When click, call playTamago()
+$('.play').on('click', () => {
 
+	xeno.playTamago();
+});
 
 
 
