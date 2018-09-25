@@ -35,7 +35,8 @@ class Tamagotchi {
 		this.boredom = 1;
 		this.age = 0;
 	}
-	nameTamago(name){
+
+	nameTamago(name){		// CALLED when user clicks on nameButton
 		console.log("I've got a name!");
 		this.name = name;
 	}
@@ -51,42 +52,54 @@ class Tamagotchi {
 	playTamago(){			// Have xeno have ^^ eyes and dance
 		console.log(" <3 ");
 	}
+
 	getsOlder(){			// Give xeno a birthday cake
 		console.log("Happy Birthday!");
 	}
 
 }
 
-// Create Tamagotchi
+
+// CREATE TAMAGO
 const xeno = new Tamagotchi();
 
-xeno.nameTamago();
-console.log(xeno);
 
-// FIRST MAKE GAME OBJECT
+// var intervalID = setInterval(function() { myFunc('one', 'two', 'three'); }, 1000);
 
+// SET INTERVAL 
+// Increase Hunger, Sleepiness, Boredom at chosen interval
+let interval = setInterval(function() {
+
+	// Only do this if Tamago has a name!
+	if (xeno.name){
+		// We'll decide later the stats
+		xeno.hunger += 1;
+		xeno.sleepiness += 1;
+		xeno.boredome += 1;
+		console.log(xeno.hunger);
+	}
+}, 2000);			// Do something every 2 seconds
+
+
+
+// MAKE GAME OBJECT
 const game = {
 
 	// Begin game
+	// setInterval()
 
-	// Have user choose their Tamagotchi name through user input
+};
 
-	// xeno.nameTamago();
 
-	// start interval
-	// Increase Hunger, Sleepiness, Boredom at chosen interval
 
-}
 
 // HARD CODE BUTTONS ON SCREEN IN HTML
 
 // Button to name
 $('#nameButton').on('click', () => {
 
-  // Grab the inputs VALUE
   const $name = $('input').val();
 
-  console.log($name);
   xeno.nameTamago($name)
 });
 
