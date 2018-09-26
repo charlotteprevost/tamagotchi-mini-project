@@ -180,12 +180,18 @@ function clearTimer() {
 const setBackground = () => {
 		
 	let $background = $('.background');
+	let $actBackground = $('#act');
 
 	if (lightsOff) {
-		$background.css({'background-image': 'url("https://i.imgur.com/Bqjshq6.png")'})
+		$background.css({'background-image': 'url("https://i.imgur.com/Bqjshq6.png")'});
+		$actBackground.css({'background-color': '#334357'});
 	} else {
-		$background.css({'background-image': 'url("https://i.imgur.com/N2Qy7H4.png")'})		
+		$background.css({'background-image': 'url("https://i.imgur.com/N2Qy7H4.png")'});
+		$actBackground.css({'background-color': '#3ba93b'});		
 	}
+
+
+
 
 
 }
