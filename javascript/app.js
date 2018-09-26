@@ -15,14 +15,6 @@ IF NO INTERACTION, TAMAGO DIES
 
 
 
-/*******************************************************************************************
-
-		Set timer and lightsOff
-
-*******************************************************************************************/
-
-let timer = 0;					// timer ++ in setInterval();
-let lightsOff = false;			// WHILE LIGHTS ARE OFF, TAMAGO CANNOT FEED/PLAY
 
 /******************************************************************************************
 
@@ -53,10 +45,6 @@ class Tamagotchi {
 		this.alive = true;
 	}
 
-	nameTamago(name){					// Called when user clicks on nameButton
-		console.log("I've got a name!");
-		this.name = name;
-	}
 
 	isDead(){
 		if (this.hunger > 4 || this.sleepiness > 4 || this.boredom > 4){
@@ -76,6 +64,7 @@ class Tamagotchi {
 				this.hunger -= 5;
 			}
 		}
+		//game.updateStats()
 	}
 
 	sleepTamago(){						// Called when user clicks .light	
@@ -83,7 +72,7 @@ class Tamagotchi {
 		console.log("zzzZZZZ");
 		
 		if (lightsOff === false){		// If light is on, you can sleepTamago and turn light off
-			this.sleepiness = 0; 		// Reset sleep to zero 
+			this.sleepiness = 1; 		// Reset sleep to zero 
 			lightsOff = true;			// WHERE TO CHANGE BACKGROUND?
 		} else {
 			lightsOff = false;
@@ -120,98 +109,143 @@ const xeno = new Tamagotchi();
 // }
 
 
-/*******************************************************************************************
-
-		DEFINE FUNCTIONS THAT WILL START AND STOP TIMER
-
-*******************************************************************************************/
-
-let IntID = setTimer();
-
-function setTimer(){
-    let interval = setInterval(function() {
-
-	// Only do this if Tamago has a name AND if clearTimer === false
-	if (xeno.name && xeno.alive){
-		// Check if dead
-		if (!xeno.isDead()){
-				
-			// Have a timer to set stats
-			// If timer condition AND lights are ON, increase sleepiness
-			if (timer % 25 === 0 && lightsOff === false){
-				xeno.sleepiness += 2;			// slow speed but medium-strong
-			
-			} else if (timer % 12 === 0){		// average speed but medium
-				xeno.hunger += 1;
-			
-			} else if (timer % 9 === 0){		// fast but little
-				xeno.boredom += 1;
-			}
-			
-			timer += 1;
-			console.log(	"Hunger: " + xeno.hunger + "\n" + 
-							"Sleepiness: " + xeno.sleepiness + "\n" +
-							"Boredom: " + xeno.boredom);
-		}
-
-	} else {
-		clearTimer();
-	}
-
-
-}, 1000);
-     return interval;
-}
-
-function clearTimer() {
-
-    clearInterval(IntID);
-
-}
-
-
-/*******************************************************************************************
-
-		DEFINE FUNCTION TO CHANGE BACKGROUND
-
-*******************************************************************************************/
-
-// Set background depending on lights On/Off
-const setBackground = () => {
-		
-	let $background = $('.background');
-	let $actBackground = $('#act');
-
-	if (lightsOff) {
-		$background.css({'background-image': 'url("https://i.imgur.com/Bqjshq6.png")'});
-		$actBackground.css({'background-color': '#334357'});
-	} else {
-		$background.css({'background-image': 'url("https://i.imgur.com/N2Qy7H4.png")'});
-		$actBackground.css({'background-color': '#3ba93b'});		
-	}
 
 
 
 
-
-}
-
-
-/*******************************************************************************************
+/******************************************************************************************
 *******************************************************************************************
 
-		GAME OBJECT
+
+									GAME OBJECT
+
+
+Game begins if user enters Tamago name and clicks nameButton
+nameButton activates setTimer()
+MAKE IT SO THAT the nameButton only starts timer ONCE with boolean!
+
+setTimer only activates if Tamago has a name, i.e. if (xeno.name)
+clearTimer should activate when Tamago is dead, i.e. if isDead() === true
+We check isDead() at the end of every timer round?
+
 
 *******************************************************************************************
-*******************************************************************************************/
+******************************************************************************************/
+
 
 const game = {
 
-	// Game begins if user enters Tamago name and clicks nameButton
-	// nameButton activates setTimer()
-	// setTimer only activates if Tamago has a name, i.e. if (xeno.name)
-	// clearTimer should activate when Tamago is dead, i.e. if isDead() === true
-	// We check isDead() at the end of every timer round?
+	/*******************************************************************************************
+
+			Set timer and lightsOff
+
+	*******************************************************************************************/
+
+	timer: 0,								// timer ++ in setInterval();
+
+	lightsOff: false,						// WHILE LIGHTS ARE OFF, TAMAGO CANNOT FEED/PLAY
+
+	xeno: null,
+
+	intervalId: null,
+
+	/*******************************************************************************************
+
+			Define functions that will start and stop timer
+
+	*******************************************************************************************/
+
+	setTimer(){
+	    let interval = setInterval(function() {
+
+			// Only do this if Tamago has a name AND if clearTimer === false
+			if (game.xeno.name && game.xeno.alive){
+				// Check if dead
+				if (!game.xeno.isDead()){
+						
+					// Have a timer to set stats
+					// If timer condition AND lights are ON, increase sleepiness
+					if (game.timer % 25 === 0 && game.lightsOff === false){
+						game.xeno.sleepiness += 2;			// slow speed but medium-strong
+						$('.sleepiness span').text(game.xeno.sleepiness + "/10");
+
+					} else if (game.timer % 12 === 0){		// average speed but medium
+						game.xeno.hunger += 1;
+						$('.hunger span').text(game.xeno.hunger + "/10");
+					
+					} else if (game.timer % 9 === 0){		// fast but little
+						game.xeno.boredom += 1;
+						$('.boredom span').text(game.xeno.boredom + "/10");
+					}
+					
+					game.timer += 1;
+					console.log(	"Hunger: " 		+ game.xeno.hunger 		+ "\n" + 
+									"Sleepiness: " 	+ game.xeno.sleepiness 	+ "\n" +
+									"Boredom: " 	+ game.xeno.boredom);
+
+				} else {
+					clearTimer();
+				}
+
+			}
+
+		}, 1000);
+	    
+	    return interval;
+	},
+
+	clearTimer() {
+	    clearInterval(this.setTimer);
+	},
+
+
+
+	nameTamago(name){						// Called when user clicks on nameButton
+		console.log("I've got a name!");
+		this.xeno.name = name;
+	},
+
+
+	start() {
+		this.xeno = new Tamagotchi(); 		// CREATE new Tamagotchi
+		
+		const $name = $('input').val(); 	// Get name
+
+		this.nameTamago($name);				// Set name
+		
+		this.setTimer();							// Start timer when entered name
+	},
+
+
+
+		// start the timer
+		// disable the button
+
+
+	// printStuff 
+		// $('#') update the values
+
+
+	/*******************************************************************************************
+
+			Define function to change background
+
+	*******************************************************************************************/
+
+	// Set background depending on lights On/Off
+	setBackground(){
+			
+		let $background = $('.background');
+		let $actBackground = $('#act');
+
+		if (lightsOff) {
+			$background.css({'background-image': 'url("https://i.imgur.com/Bqjshq6.png")'});
+			$actBackground.css({'background-color': '#334357'});
+		} else {
+			$background.css({'background-image': 'url("https://i.imgur.com/N2Qy7H4.png")'});
+			$actBackground.css({'background-color': '#3ba93b'});		
+		}
+	},
 
 
 };
@@ -228,11 +262,7 @@ const game = {
 // Button to name
 $('#nameButton').on('click', () => {
 
-  const $name = $('input').val();
-
-  xeno.nameTamago($name);
-
-  setTimer();							// Start timer when entered name
+	game.start();
 });
 
 
