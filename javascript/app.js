@@ -57,40 +57,44 @@ class Tamagotchi {
 	feedTamago(){ 						// Called when user clicks on .food
 		// Have xeno eat a burger/person/doughnut
 		console.log("Omnomnom");		
-		if (lightsOff === false){		// If light is on, you can feedTamago
+		if (game.lightsOff === false){		// If light is on, you can feedTamago
 			if (this.hunger <= 5) {
 				this.hunger = 1;
 			} else {
 				this.hunger -= 5;
 			}
 		}
-		//game.updateStats()
+		game.updateStats();
 	}
 
 	sleepTamago(){						// Called when user clicks .light	
 		// Have xeno close eyes and have zZzzZZZ
 		console.log("zzzZZZZ");
 		
-		if (lightsOff === false){		// If light is on, you can sleepTamago and turn light off
+		if (game.lightsOff === false){		// If light is on, you can sleepTamago and turn light off
 			this.sleepiness = 1; 		// Reset sleep to zero 
-			lightsOff = true;			// WHERE TO CHANGE BACKGROUND?
+			game.lightsOff = true;			// WHERE TO CHANGE BACKGROUND?
 		} else {
-			lightsOff = false;
+			game.lightsOff = false;
 		}
 		
-		setBackground(); 				// Change background
+		game.setBackground(); 				// Change background
+		game.updateStats();
+
 	}
 
 	playTamago(){						// Called when user clicks on .play
 		// Have xeno have ^^ eyes and dance
 		console.log(" <3 ");
-		if (lightsOff === false){		// If light is on, you can play with Tamago
+		if (game. 	lightsOff === false){		// If light is on, you can play with Tamago
 			if (this.boredom <= 3) {
 				this.boredom = 1;
 			} else {
 				this.boredom -= 3;
 			}
 		}
+		game.updateStats();
+
 	}
 
 	getsOlder(){						// Called automatically
@@ -99,18 +103,6 @@ class Tamagotchi {
 	}
 
 }
-
-
-// // CREATE TAMAGO
-// const makeTamago = () => {
-	
-const xeno = new Tamagotchi();
-
-// }
-
-
-
-
 
 
 /******************************************************************************************
@@ -149,6 +141,7 @@ const game = {
 
 	intervalId: null,
 
+
 	/*******************************************************************************************
 
 			Define functions that will start and stop timer
@@ -167,15 +160,15 @@ const game = {
 					// If timer condition AND lights are ON, increase sleepiness
 					if (game.timer % 25 === 0 && game.lightsOff === false){
 						game.xeno.sleepiness += 2;			// slow speed but medium-strong
-						$('.sleepiness span').text(game.xeno.sleepiness + "/10");
+						// $('.sleepiness span').text(game.xeno.sleepiness + "/10");
 
 					} else if (game.timer % 12 === 0){		// average speed but medium
 						game.xeno.hunger += 1;
-						$('.hunger span').text(game.xeno.hunger + "/10");
+						// $('.hunger span').text(game.xeno.hunger + "/10");
 					
 					} else if (game.timer % 9 === 0){		// fast but little
 						game.xeno.boredom += 1;
-						$('.boredom span').text(game.xeno.boredom + "/10");
+						// $('.boredom span').text(game.xeno.boredom + "/10");
 					}
 					
 					game.timer += 1;
@@ -183,10 +176,11 @@ const game = {
 									"Sleepiness: " 	+ game.xeno.sleepiness 	+ "\n" +
 									"Boredom: " 	+ game.xeno.boredom);
 
-				} else {
-					clearTimer();
-				}
+					game.updateStats();
 
+				} else {
+					game.clearTimer();
+				}
 			}
 
 		}, 1000);
@@ -194,11 +188,15 @@ const game = {
 	    return interval;
 	},
 
+
+	/****************************** Clear Timer ******************************/
+
 	clearTimer() {
 	    clearInterval(this.setTimer);
 	},
 
 
+	/****************************** Name Tamago ******************************/
 
 	nameTamago(name){						// Called when user clicks on nameButton
 		console.log("I've got a name!");
@@ -206,39 +204,37 @@ const game = {
 	},
 
 
+	/****************************** Start Game ******************************/
+
 	start() {
 		this.xeno = new Tamagotchi(); 		// CREATE new Tamagotchi
 		
 		const $name = $('input').val(); 	// Get name
 
 		this.nameTamago($name);				// Set name
+
+		$('.sleepiness span').text("0/10");	//
+		$('.hunger span').text("0/10");		// Default Stats at the beginning
+		$('.boredom span').text("0/10");	//
 		
-		this.setTimer();							// Start timer when entered name
+		this.setTimer();					// Start timer only once (and if name entered)								
 	},
-
-
-
-		// start the timer
-		// disable the button
-
-
-	// printStuff 
-		// $('#') update the values
 
 
 	/*******************************************************************************************
 
-			Define function to change background
+							UPDATES ON SCREEN FOR USER
 
 	*******************************************************************************************/
 
-	// Set background depending on lights On/Off
+	/******************** Set Background Depending on Lights On/Off ********************/
+
 	setBackground(){
 			
 		let $background = $('.background');
 		let $actBackground = $('#act');
 
-		if (lightsOff) {
+		if (this.lightsOff) {
 			$background.css({'background-image': 'url("https://i.imgur.com/Bqjshq6.png")'});
 			$actBackground.css({'background-color': '#334357'});
 		} else {
@@ -248,7 +244,27 @@ const game = {
 	},
 
 
+	/**************************** Update Stats on SCREEN ****************************/
+
+	updateStats(){
+
+		$('.sleepiness span').text(this.xeno.sleepiness + "/10");
+
+		$('.hunger span').text(this.xeno.hunger + "/10");
+
+		$('.boredom span').text(this.xeno.boredom + "/10");
+
+	}
+
+
+
+
+
+
+
+
 };
+
 
 
 /*******************************************************************************************
@@ -262,7 +278,9 @@ const game = {
 // Button to name
 $('#nameButton').on('click', () => {
 
-	game.start();
+	if (game.timer === 0){
+		game.start();
+	}
 });
 
 
@@ -270,7 +288,7 @@ $('#nameButton').on('click', () => {
 // When click, call feedTamago()
 $('.food').on('click', () => {
 
-	xeno.feedTamago();
+	game.xeno.feedTamago();
 });
 
 
@@ -278,7 +296,7 @@ $('.food').on('click', () => {
 // When click, call sleepTamago()
 $('.light').on('click', () => {
 
-	xeno.sleepTamago();
+	game.xeno.sleepTamago();
 });
 
 
@@ -286,7 +304,7 @@ $('.light').on('click', () => {
 // When click, call playTamago()
 $('.play').on('click', () => {
 
-	xeno.playTamago();
+	game.xeno.playTamago();
 });
 
 
