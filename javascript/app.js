@@ -51,7 +51,8 @@ class Tamagotchi {
 
 	isDead(){
 		if (this.hunger > 10 || this.sleepiness > 10 || this.boredom > 10){
-			console.log(this.name + " is dead...");
+			console.log("Game Over");
+			game.diedOf();
 			this.alive = false;
 			return true;
 		}
@@ -268,7 +269,8 @@ const game = {
 			$('.hunger span').text(this.xeno.hunger + "/10");
 			$('.boredom span').text(this.xeno.boredom + "/10");			
 			$('.sprite span').text(this.xeno.name + " - lvl: " + this.xeno.age);
-		}
+		} 
+
 	},
 
 
@@ -375,8 +377,46 @@ const game = {
 
 		}
 
-	}
+	},
 
+
+	/********************************* Tamago Dead *********************************/
+
+	diedOf(){
+
+		let $background = $('.background');
+		let $act = $('#act');
+		let $sprite = $('.sprite');
+
+		if (this.xeno.hunger >= 11){			// Xeno ate player
+			$background.css({'background-image': 'url("images/death.gif")',
+							'width': '636px',
+							'height': '350px',
+							'margin': 0
+							});
+			$sprite.css({'opacity': '0'});		
+			$act.css({'opacity': '0'});		
+
+		} else if (this.xeno.sleepiness >= 11){	// Xeno went insane and killed player
+			$background.css({'background-image': 'url("images/death.gif")',
+							'width': '636px',
+							'height': '350px',
+							'margin': 0
+							});
+			$sprite.css({'opacity': '0'});		
+			$act.css({'opacity': '0'});		
+
+		} else if (this.xeno.boredom >= 11){	// Xeno played with player entrails
+			$background.css({'background-image': 'url("images/death.gif")',
+							'width': '636px',
+							'height': '350px',
+							'margin': 0
+							});
+			$sprite.css({'opacity': '0'});		
+			$act.css({'opacity': '0'});		
+ 		}
+
+	}
 
 
 
