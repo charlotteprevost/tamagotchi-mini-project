@@ -41,24 +41,33 @@ input {
 	margin: 10px auto;
 }
 
-div#sprite{
+div.sprite{
     margin: 270px auto;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 }
 
-img {
+.sprite #sprite {
 	height: 128px;
 	width: 128px;
-	opacity: 0;
+	opacity: 1; 			/*SWITCH TO 0 */
 }
 
-#sprite span {
+.sprite span {
 	width: 128px;
 	text-align: center;
 	font-size: 14px;
 	margin-bottom: 5px;
+}
+
+img#reaction {
+	height: 57px;
+	/*width: 60px;*/
+	transform: translate(-130%, 125%);
+	margin-right: -50px;
+	opacity: 0;				/*SWITCH TO 0*/
+
 }
 
 #act {

@@ -43,6 +43,9 @@ class Tamagotchi {
 		this.boredom = 1;
 		this.age = 1;
 		this.alive = true;
+		this.fed = false;
+		this.slept = false;
+		this.played = false;
 	}
 
 
@@ -54,8 +57,7 @@ class Tamagotchi {
 		}
 	}
 
-	feedTamago(){ 						// Called when user clicks on .food
-		// Have xeno eat a burger/person/doughnut
+	feedTamago(){ 							// Called when user clicks on .food
 		console.log("Omnomnom");		
 		if (game.lightsOff === false){		// If light is on, you can feedTamago
 			if (this.hunger <= 5) {
@@ -63,8 +65,10 @@ class Tamagotchi {
 			} else {
 				this.hunger -= 5;
 			}
+			this.fed = true;
 		}
 		game.updateStats();
+		game.tamagoReact();
 	}
 
 	sleepTamago(){						// Called when user clicks .light	
@@ -77,23 +81,27 @@ class Tamagotchi {
 		} else {
 			game.lightsOff = false;
 		}
+		this.slept = true;
 		
 		game.setBackground(); 				// Change background
 		game.updateStats();
+		game.tamagoReact();
 
 	}
 
 	playTamago(){						// Called when user clicks on .play
 		// Have xeno have ^^ eyes and dance
 		console.log(" <3 ");
-		if (game. 	lightsOff === false){		// If light is on, you can play with Tamago
+		if (game.lightsOff === false){		// If light is on, you can play with Tamago
 			if (this.boredom <= 3) {
 				this.boredom = 1;
 			} else {
 				this.boredom -= 3;
 			}
+			this.played = true;
 		}
 		game.updateStats();
+		game.tamagoReact();
 
 	}
 
@@ -178,6 +186,7 @@ const game = {
 									"Age: " 		+ game.xeno.age)
 
 					game.updateStats();
+					game.tamagoAsks();
 					game.morphTamago();
 
 				} else {
@@ -185,7 +194,7 @@ const game = {
 				}
 			}
 
-		}, 100);
+		}, 1000);
 	    
 	    return interval;
 	},
@@ -213,10 +222,10 @@ const game = {
 		
 		const $name = $('input').val(); 	// Get name and store it in $name
 
-		this.nameTamago($name);	
-					// Set name with nameTamago()
-		$('img').attr({
-				src: "images/xeno-normal.gif"})
+		this.nameTamago($name);				// Set name with nameTamago()
+
+		$('#sprite').attr({ src: "images/xeno-normal.gif" });	// Default sprite image on load
+
 		$('.sleepiness span').text("0/10");	//
 		$('.hunger span').text("0/10");		// Default Stats at the beginning
 		$('.boredom span').text("0/10");	//
@@ -258,15 +267,16 @@ const game = {
 			$('.sleepiness span').text(this.xeno.sleepiness + "/10");
 			$('.hunger span').text(this.xeno.hunger + "/10");
 			$('.boredom span').text(this.xeno.boredom + "/10");			
-			$('#sprite span').text(this.xeno.name + " - lvl: " + this.xeno.age);
+			$('.sprite span').text(this.xeno.name + " - lvl: " + this.xeno.age);
 		}
 	},
+
 
 	/********************************* Morph Tamago *********************************/
 
 	morphTamago(){
 
-		let $img = $('img');
+		let $img = $('#sprite');
 		
 		if (this.xeno.age < 5){
 			$img.attr({ src: "images/xeno-normal.gif" })
@@ -281,8 +291,91 @@ const game = {
 			$img.attr({ src: "images/xeno-morph2.gif" })
 			
 		}
-	}
+	},
 
+
+	/********************************* Tamago Asks *********************************/
+	/*********** If stats are getting high, Tamago asks for food/bed/play ***********/
+
+	tamagoAsks(){
+
+		// Sad Tamago when hungry/bored/sleepy
+		if (this.xeno.hunger >= 6 || this.xeno.boredom >= 6 || this.xeno.sleepiness >= 6){
+			$('#sprite').attr({ src: "images/xeno-sad.gif" });
+			$('#sprite').css( "opacity", "1" );
+		}
+
+		// 
+		if (this.xeno.hunger >= 6){
+			$('#reaction').attr({ src: "images/bubble-ask-feed.gif" });
+			$('#reaction').css({ 
+				"opacity" : "1",
+				"margin-right" : "-30px" 
+			});
+			this.xeno.reaction = "hungry";
+
+		} else if (this.xeno.boredom >= 6) {
+			$('#reaction').attr({ src: "images/bubble-ask-play.gif" });
+			$('#reaction').css({ 
+				"opacity" : "1",
+				"margin-right" : "-90px" 
+			});
+			this.xeno.reaction = "bored";
+
+		} else if (this.xeno.sleepiness >= 6){
+			$('#reaction').attr({ src: "images/bubble-ask-sleep.gif" });
+			$('#reaction').css({ 
+				"opacity" : "1",
+				"margin-right" : "-220px"
+				});
+			this.xeno.reaction = "sleepy";
+
+		}
+
+	},
+
+
+	/********************************* Give Tamago *********************************/
+
+	giveTamago(){
+
+
+
+	},
+	
+
+	/********************************* React Tamago *********************************/
+
+	tamagoReact(){
+		if (this.xeno.fed){
+
+			$('#reaction').attr({ src: "images/bubble-react-heart.gif" })
+			$('#reaction').css({ 
+				"opacity" : "1",
+				"margin-right" : "20px" 
+			});
+			this.xeno.fed = false;
+
+		} else if (this.xeno.slept){
+
+			$('#reaction').attr({ src: "images/bubble-react-sleep.gif" })
+			$('#reaction').css({ 
+				"opacity" : "1",
+				"margin-right" : "0" 
+			});
+			this.xeno.slept = false;
+
+		} else if (this.xeno.played){
+			$('#reaction').attr({ src: "images/bubble-react-happy.gif" })
+			$('#reaction').css({ 
+				"opacity" : "1",
+				"margin-right" : "30px" 
+			});
+			this.xeno.played = false;
+
+		}
+
+	}
 
 
 
