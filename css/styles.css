@@ -1,5 +1,6 @@
 body {
 	background-color: black;
+	font-family: 'Ubuntu', sans-serif;
 }
 
 div#tamagoName, {
@@ -40,12 +41,24 @@ input {
 	margin: 10px auto;
 }
 
+div#sprite{
+    margin: 270px auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
 img {
-	display: block;
 	height: 128px;
 	width: 128px;
-	margin: 300px auto;
+	opacity: 0;
+}
 
+#sprite span {
+	width: 128px;
+	text-align: center;
+	font-size: 14px;
+	margin-bottom: 5px;
 }
 
 #act {
@@ -81,7 +94,7 @@ img {
 	padding: 5px;
 }
 
-span {
+.stats span {
 	float: right;
 }
 

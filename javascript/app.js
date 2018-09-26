@@ -41,13 +41,13 @@ class Tamagotchi {
 		this.hunger = 1;
 		this.sleepiness = 1;
 		this.boredom = 1;
-		this.age = 0;
+		this.age = 1;
 		this.alive = true;
 	}
 
 
 	isDead(){
-		if (this.hunger > 4 || this.sleepiness > 4 || this.boredom > 4){
+		if (this.hunger > 10 || this.sleepiness > 10 || this.boredom > 10){
 			console.log(this.name + " is dead...");
 			this.alive = false;
 			return true;
@@ -158,32 +158,34 @@ const game = {
 						
 					// Have a timer to set stats
 					// If timer condition AND lights are ON, increase sleepiness
-					if (game.timer % 25 === 0 && game.lightsOff === false){
+					if (game.timer % 20 === 0){
+						game.xeno.age += 1;			// slow speed but medium-strong
+
+					} else if (game.timer % 25 === 0 && game.lightsOff === false){
 						game.xeno.sleepiness += 2;			// slow speed but medium-strong
-						// $('.sleepiness span').text(game.xeno.sleepiness + "/10");
 
 					} else if (game.timer % 12 === 0){		// average speed but medium
 						game.xeno.hunger += 1;
-						// $('.hunger span').text(game.xeno.hunger + "/10");
 					
 					} else if (game.timer % 9 === 0){		// fast but little
 						game.xeno.boredom += 1;
-						// $('.boredom span').text(game.xeno.boredom + "/10");
 					}
 					
 					game.timer += 1;
 					console.log(	"Hunger: " 		+ game.xeno.hunger 		+ "\n" + 
 									"Sleepiness: " 	+ game.xeno.sleepiness 	+ "\n" +
-									"Boredom: " 	+ game.xeno.boredom);
+									"Boredom: " 	+ game.xeno.boredom		+ "\n" +
+									"Age: " 		+ game.xeno.age)
 
 					game.updateStats();
+					game.morphTamago();
 
 				} else {
 					game.clearTimer();
 				}
 			}
 
-		}, 1000);
+		}, 100);
 	    
 	    return interval;
 	},
@@ -209,10 +211,12 @@ const game = {
 	start() {
 		this.xeno = new Tamagotchi(); 		// CREATE new Tamagotchi
 		
-		const $name = $('input').val(); 	// Get name
+		const $name = $('input').val(); 	// Get name and store it in $name
 
-		this.nameTamago($name);				// Set name
-
+		this.nameTamago($name);	
+					// Set name with nameTamago()
+		$('img').attr({
+				src: "images/xeno-normal.gif"})
 		$('.sleepiness span').text("0/10");	//
 		$('.hunger span').text("0/10");		// Default Stats at the beginning
 		$('.boredom span').text("0/10");	//
@@ -248,16 +252,36 @@ const game = {
 
 	updateStats(){
 
-		$('.sleepiness span').text(this.xeno.sleepiness + "/10");
+		// Only update if Tama not dead
+		if (!game.xeno.isDead()){
 
-		$('.hunger span').text(this.xeno.hunger + "/10");
+			$('.sleepiness span').text(this.xeno.sleepiness + "/10");
+			$('.hunger span').text(this.xeno.hunger + "/10");
+			$('.boredom span').text(this.xeno.boredom + "/10");			
+			$('#sprite span').text(this.xeno.name + " - lvl: " + this.xeno.age);
+		}
+	},
 
-		$('.boredom span').text(this.xeno.boredom + "/10");
+	/********************************* Morph Tamago *********************************/
 
+	morphTamago(){
+
+		let $img = $('img');
+		
+		if (this.xeno.age < 5){
+			$img.attr({ src: "images/xeno-normal.gif" })
+			$img.css( "opacity", "1" );
+
+		// When Tamago is between age 5-10 normal img
+		} else if (this.xeno.age >= 5 && this.xeno.age <= 10){
+			$img.attr({ src: "images/xeno-morph1.gif" })
+
+		// When Tamago is age 10+
+		} else if (this.xeno.age >= 10) {
+			$img.attr({ src: "images/xeno-morph2.gif" })
+			
+		}
 	}
-
-
-
 
 
 
