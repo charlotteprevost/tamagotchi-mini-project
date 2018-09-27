@@ -41,6 +41,10 @@ input {
 	margin: 10px auto;
 }
 
+.youDied {
+	
+}
+
 div.sprite{
     margin: 270px auto;
 	display: flex;

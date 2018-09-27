@@ -195,7 +195,7 @@ const game = {
 				}
 			}
 
-		}, 1000);
+		}, 100);
 	    
 	    return interval;
 	},
@@ -387,34 +387,48 @@ const game = {
 		let $background = $('.background');
 		let $act = $('#act');
 		let $sprite = $('.sprite');
+		let $tamagoName = $('#tamagoName');
+		let $youDied = $('.youDied');
 
 		if (this.xeno.hunger >= 11){			// Xeno ate player
 			$background.css({'background-image': 'url("images/death.gif")',
 							'width': '636px',
 							'height': '350px',
-							'margin': 0
+							'margin': '0 auto'
 							});
 			$sprite.css({'opacity': '0'});		
 			$act.css({'opacity': '0'});		
+			$tamagoName.css({'opacity': '0'});		
+			$youDied.attr({ src: "images/you-died.png",
+							'width': '100%' 
+							})
 
 		} else if (this.xeno.sleepiness >= 11){	// Xeno went insane and killed player
 			$background.css({'background-image': 'url("images/death.gif")',
 							'width': '636px',
 							'height': '350px',
-							'margin': 0
+							'margin': '0 auto'
 							});
 			$sprite.css({'opacity': '0'});		
 			$act.css({'opacity': '0'});		
+			$tamagoName.css({'opacity': '0'});		
+			$youDied.attr({ src: "images/you-died.png",
+							'width': '100%' 
+							})
 
 		} else if (this.xeno.boredom >= 11){	// Xeno played with player entrails
 			$background.css({'background-image': 'url("images/death.gif")',
 							'width': '636px',
 							'height': '350px',
-							'margin': 0
+							'margin': '0 auto'
 							});
 			$sprite.css({'opacity': '0'});		
 			$act.css({'opacity': '0'});		
- 		}
+			$tamagoName.css({'opacity': '0'});		
+ 			$youDied.attr({ src: "images/you-died.png",
+ 							'width': '100%' 
+ 							})
+		}
 
 	}
 
