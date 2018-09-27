@@ -50,7 +50,7 @@ class Tamagotchi {
 
 
 	isDead(){
-		if (this.hunger > 10 || this.sleepiness > 10 || this.boredom > 10){
+		if (this.hunger > 9 || this.sleepiness > 9 || this.boredom > 9){
 			console.log("Game Over");
 			game.diedOf();
 			this.alive = false;
@@ -61,10 +61,10 @@ class Tamagotchi {
 	feedTamago(){ 							// Called when user clicks on .food
 		console.log("Omnomnom");		
 		if (game.lightsOff === false){		// If light is on, you can feedTamago
-			if (this.hunger <= 5) {
+			if (this.hunger <= 3) {
 				this.hunger = 1;
 			} else {
-				this.hunger -= 5;
+				this.hunger -= 3;
 			}
 			this.fed = true;
 		}
@@ -94,10 +94,10 @@ class Tamagotchi {
 		// Have xeno have ^^ eyes and dance
 		console.log(" <3 ");
 		if (game.lightsOff === false){		// If light is on, you can play with Tamago
-			if (this.boredom <= 3) {
+			if (this.boredom <= 2) {
 				this.boredom = 1;
 			} else {
-				this.boredom -= 3;
+				this.boredom -= 2;
 			}
 			this.played = true;
 		}
@@ -167,10 +167,10 @@ const game = {
 						
 					// Have a timer to set stats
 					// If timer condition AND lights are ON, increase sleepiness
-					if (game.timer % 20 === 0){
+					if (game.timer % 30 === 0){
 						game.xeno.age += 1;			// slow speed but medium-strong
 
-					} else if (game.timer % 25 === 0 && game.lightsOff === false){
+					} else if (game.timer % 15 === 0 && game.lightsOff === false){
 						game.xeno.sleepiness += 2;			// slow speed but medium-strong
 
 					} else if (game.timer % 12 === 0){		// average speed but medium
@@ -195,7 +195,7 @@ const game = {
 				}
 			}
 
-		}, 100);
+		}, 1000);
 	    
 	    return interval;
 	},
@@ -303,7 +303,7 @@ const game = {
 
 		// Sad Tamago when hungry/bored/sleepy
 		if (this.xeno.hunger >= 6 || this.xeno.boredom >= 6 || this.xeno.sleepiness >= 6){
-			$('#sprite').attr({ src: "images/xeno-sad.gif" });
+			// DIFFERENT IMAGE HERE for $sprite
 			$('#sprite').css( "opacity", "1" );
 		}
 
@@ -313,7 +313,7 @@ const game = {
 			$('#reaction').css({ 
 				"opacity" : "1",
 				"margin-right" : "-30px" 
-			});
+			}).velocity("transition.fadeIn", {drag: true});
 			this.xeno.reaction = "hungry";
 
 		} else if (this.xeno.boredom >= 6) {
@@ -321,7 +321,7 @@ const game = {
 			$('#reaction').css({ 
 				"opacity" : "1",
 				"margin-right" : "-90px" 
-			});
+			}).velocity("transition.fadeIn", {drag: true});
 			this.xeno.reaction = "bored";
 
 		} else if (this.xeno.sleepiness >= 6){
@@ -329,7 +329,7 @@ const game = {
 			$('#reaction').css({ 
 				"opacity" : "1",
 				"margin-right" : "-220px"
-				});
+				}).velocity("transition.fadeIn", {drag: true});
 			this.xeno.reaction = "sleepy";
 
 		}
@@ -390,7 +390,7 @@ const game = {
 		let $tamagoName = $('#tamagoName');
 		let $youDied = $('.youDied');
 
-		if (this.xeno.hunger >= 11){			// Xeno ate player
+		if (this.xeno.hunger >= 10){			// Xeno ate player
 			$background.css({'background-image': 'url("images/death.gif")',
 							'width': '636px',
 							'height': '350px',
@@ -401,9 +401,9 @@ const game = {
 			$tamagoName.css({'opacity': '0'});		
 			$youDied.attr({ src: "images/you-died.png",
 							'width': '100%' 
-							})
+							}).velocity("callout.flash", {loop: true});
 
-		} else if (this.xeno.sleepiness >= 11){	// Xeno went insane and killed player
+		} else if (this.xeno.sleepiness >= 10){	// Xeno went insane and killed player
 			$background.css({'background-image': 'url("images/death.gif")',
 							'width': '636px',
 							'height': '350px',
@@ -414,9 +414,9 @@ const game = {
 			$tamagoName.css({'opacity': '0'});		
 			$youDied.attr({ src: "images/you-died.png",
 							'width': '100%' 
-							})
+							}).velocity("callout.flash", {loop: true});
 
-		} else if (this.xeno.boredom >= 11){	// Xeno played with player entrails
+		} else if (this.xeno.boredom >= 10){	// Xeno played with player entrails
 			$background.css({'background-image': 'url("images/death.gif")',
 							'width': '636px',
 							'height': '350px',
@@ -427,7 +427,7 @@ const game = {
 			$tamagoName.css({'opacity': '0'});		
  			$youDied.attr({ src: "images/you-died.png",
  							'width': '100%' 
- 							})
+ 							}).velocity("callout.flash", {loop: true});
 		}
 
 	}
